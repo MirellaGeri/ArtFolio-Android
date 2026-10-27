@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ArtFolio</string>
+    <string name="main_title">ArtFolio</string>
+    <string name="nav_menu_home">Home</string>
+    <string name="nav_menu_category">Category</string>
+    <string name="nav_menu_user">User</string>
 </resources>
