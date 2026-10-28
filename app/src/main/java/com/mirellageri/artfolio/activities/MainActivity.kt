@@ -16,14 +16,12 @@ import com.mirellageri.artfolio.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var adapter: ProjectAdapter
-    lateinit var bottomNavigationView : BottomNavigationView
     var projectList: List<Project> = emptyList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        bottomNavigationView = binding.bottomNavigationView
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -32,13 +30,26 @@ class MainActivity : AppCompatActivity() {
         adapter = ProjectAdapter(projectList, ::onItemClick)
         binding.recyclerViewMain.adapter = adapter
         binding.recyclerViewMain.layoutManager = GridLayoutManager(this, 2)
+
+        binding.addProjectButton.setOnClickListener {
+            //val project = Project(-1,"","","","")
+            val intent = Intent(this, AddProjectActivity::class.java)
+            startActivity(intent)
+        }
+        getNavigationView()
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
     private fun onItemClick(position: Int){
         val project = projectList[position]
-        //val intent = Intent
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("PROJECT_ID", project.id)
+        startActivity(intent)
     }
     private fun getNavigationView(){
-        bottomNavigationView.setOnItemSelectedListener { item ->
+        binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when(item.itemId){
                 R.id.menu_home -> {
                     true

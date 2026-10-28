@@ -4,4 +4,9 @@
     <string name="nav_menu_home">Home</string>
     <string name="nav_menu_category">Category</string>
     <string name="nav_menu_user">User</string>
+    <string name="description_label_detail">Description</string>
+    <string name="detail_button_contact">Contact</string>
+    <string name="new_project_title">Project Title</string>
+    <string name="new_project_category">Category</string>
+    <string name="new_project_description">Project Description</string>
 </resources>
