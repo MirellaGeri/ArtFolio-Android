@@ -11,12 +11,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mirellageri.artfolio.R
 import com.mirellageri.artfolio.adapters.ProjectAdapter
 import com.mirellageri.artfolio.data.Project
+import com.mirellageri.artfolio.data.ProjectDAO
 import com.mirellageri.artfolio.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var adapter: ProjectAdapter
-    var projectList: List<Project> = emptyList()
+    lateinit var projectDAO: ProjectDAO
+    var projectList = listOf<Project>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -24,9 +26,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
+        //inicializar
+        projectDAO = ProjectDAO(this)
         adapter = ProjectAdapter(projectList, ::onItemClick)
         binding.recyclerViewMain.adapter = adapter
         binding.recyclerViewMain.layoutManager = GridLayoutManager(this, 2)
@@ -41,6 +45,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        reloadData()
+    }
+    private fun reloadData(){
+        projectList = projectDAO.findAll()
+        adapter.updateData(projectList)
     }
     private fun onItemClick(position: Int){
         val project = projectList[position]

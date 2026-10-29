@@ -8,7 +8,7 @@ import com.mirellageri.artfolio.data.Project
 import com.mirellageri.artfolio.databinding.ItemProjectBinding
 
 class ProjectAdapter(
-    val items : List<Project>,
+    var items : List<Project>,
     val onItemCLick : (position:Int)-> Unit
 ): RecyclerView.Adapter<ProjectViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
@@ -24,6 +24,10 @@ class ProjectAdapter(
         }
     }
     override fun getItemCount(): Int = items.size
+    fun updateData(dataSet : List<Project>){
+        this.items = dataSet
+        notifyDataSetChanged()
+    }
 }
 
 class ProjectViewHolder(val binding: ItemProjectBinding) : RecyclerView.ViewHolder(binding.root){

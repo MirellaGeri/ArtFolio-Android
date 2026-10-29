@@ -9,4 +9,16 @@
     <string name="new_project_title">Project Title</string>
     <string name="new_project_category">Category</string>
     <string name="new_project_description">Project Description</string>
+    <string name="new_project_image">Project Image</string>
+    <string name="bottom_save_label">Save</string>
+    <string name="bottom_cancel_label">Cancel</string>
+    <string name="label_link_image">Paste the direct link (.jpg) here</string>
+    <string name="label_search_gallery">Or select from the gallery</string>
+    <string name="category_origami">Origami</string>
+    <string name="category_crochet">Crochet</string>
+    <string name="category_art2d">2D Design</string>
+    <string name="title_hint_dialog">New Category</string>
+    <string name="category_hint_dialog">Ej. 3D Design, Sculpture</string>
+    <string name="warning_category_input">Please enter a category</string>
+    <string name="toast_new_category_message">Category added</string>
 </resources>

@@ -1,79 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activities.AddProjectActivity"
-    android:padding="16dp">
-
-    <!-- TITLE -->
-    <com.google.android.material.textfield.TextInputLayout
-        style="?attr/textInputOutlinedStyle"
+    android:id="@+id/main"
+    tools:context=".activities.AddProjectActivity">
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:hint="@string/new_project_title">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/titleTextField"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- DESCRIPTION -->
-    <com.google.android.material.textfield.TextInputLayout
-        style="?attr/textInputOutlinedStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:hint="@string/new_project_description">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/descriptionTextField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:minLines="4" />
-    </com.google.android.material.textfield.TextInputLayout>
-    <!--CATEGORY  -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/categoryTextField"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/new_project_category"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-            <AutoCompleteTextView
-                android:id="@+id/categoryACTextView"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+            <!-- TITLE -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="?attr/textInputOutlinedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="false"
-                android:cursorVisible="false"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/addCategoryButton"
-            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            app:icon="@android:drawable/ic_input_add"
-            app:iconTint="@color/design_default_color_primary"
-            app:iconPadding="0dp"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            tools:ignore="SpeakableTextPresentCheck" />
-    </LinearLayout>
-</LinearLayout>
+                android:layout_marginBottom="8dp"
+                android:hint="@string/new_project_title">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/titleTextField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- DESCRIPTION -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="?attr/textInputOutlinedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:hint="@string/new_project_description">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/descriptionTextField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:minLines="4" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--CATEGORY  -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+                    <AutoCompleteTextView
+                        android:id="@+id/categoryACTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/new_project_category"
+                        android:focusable="false"
+                        android:cursorVisible="false"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/addCategoryButton"
+                    style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    app:icon="@android:drawable/ic_input_add"
+                    app:iconTint="@color/design_default_color_primary"
+                    app:iconPadding="0dp"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </LinearLayout>
+            <!--IMAGE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_project_image"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+            <com.google.android.material.textfield.TextInputLayout
+                style="?attr/textInputOutlinedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:hint="@string/label_link_image">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/imageUrlTextField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/galleryButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_search_gallery"
+                android:layout_marginBottom="16dp" />
+            <ImageView
+                android:id="@+id/previewImageView"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="24dp"
+                android:src="@drawable/bg_image_placeholder" />
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="@string/bottom_save_label" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
