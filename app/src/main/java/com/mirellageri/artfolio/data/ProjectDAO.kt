@@ -86,4 +86,27 @@ class ProjectDAO(val context : Context) {
         }
         return projectList
     }
+    fun findById(id :Int) : Project?{
+        openDB()
+        var project: Project? = null
+        try {
+            val cursor = db.query(
+                Project.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                "${Project.COLUMN_ID} = $id",              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+            )
+            if (cursor.moveToNext()) {
+                project = cursorToEntity(cursor)
+            }
+        }catch (e: Exception){
+            Log.e("DATABASE", e.localizedMessage,e)
+        }finally {
+            closeDB()
+        }
+        return project
+    }
 }

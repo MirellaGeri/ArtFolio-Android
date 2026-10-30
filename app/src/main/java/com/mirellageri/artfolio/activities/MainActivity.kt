@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerViewMain.layoutManager = GridLayoutManager(this, 2)
 
         binding.addProjectButton.setOnClickListener {
-            //val project = Project(-1,"","","","")
             val intent = Intent(this, AddProjectActivity::class.java)
             startActivity(intent)
         }
