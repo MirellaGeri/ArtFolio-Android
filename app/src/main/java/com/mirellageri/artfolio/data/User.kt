@@ -8,7 +8,7 @@ data class User(
     companion object{
         const val TABLE_NAME = "User"
         const val COLUMN_ID = "id"
-        const val COLUMN_USER_NAME = "userName"
+        const val COLUMN_USER_NAME = "user_name"
         const val COLUMN_PASSWORD = "password"
         const val SQL_CREATE_TABLE =
             "CREATE TABLE $TABLE_NAME (" +

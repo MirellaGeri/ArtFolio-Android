@@ -35,7 +35,7 @@ class DetailActivity : AppCompatActivity() {
             projectDAO.openDB()
             val project = projectDAO.findById(id)!!
             binding.titleTextView.text = project.title
-            binding.categoryChip.text = project.category
+            binding.categoryChip.text = project.category.name
             binding.descriptionTextView.text = project.description
             if (project.imageUrl.startsWith("http")) {
                 Glide.with(this)

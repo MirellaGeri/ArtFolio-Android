@@ -19,7 +19,19 @@
     <string name="category_art2d">2D Design</string>
     <string name="title_hint_dialog">New Category</string>
     <string name="category_hint_dialog">Ej. 3D Design, Sculpture</string>
-    <string name="warning_category_input">Please enter a category</string>
+    <string name="date_format">dd/MM/yyyy</string>
+    <string name="time_zone">UTC</string>
+    <string name="title_start_date">Start Date</string>
+    <string name="title_end_date">End Date</string>
+    <string name="hint_tools">Tools</string>
+    <string name="helper_text">Example: Photoshop, Procreate, watercolors, Wacom tablet</string>
+
     <string name="toast_new_category_message">Category added</string>
+    <string name="toast_validation_text_view">Please complete all required fields.</string>
+    <string name="toast_validation_category">The selected category is not valid.</string>
+    <string name="warning_category_input">Please enter a category</string>
+    <string name="error_copy_image_storage">Error to copy File to PhotoPicker</string>
     <string name="error_view_image_preview">Invalid format (.jpg, .png or .jpeg)</string>
+    <string name="error_process_gallery_image">Error processing the gallery image</string>
+    <string name="error"></string>
 </resources>

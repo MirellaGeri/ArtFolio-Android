@@ -8,6 +8,7 @@ import android.util.Log
 import com.mirellageri.artfolio.utils.DatabaseManager
 
 class ProjectDAO(val context : Context) {
+    val categoryDAO = CategoryDAO(context)
     lateinit var db : SQLiteDatabase
     fun openDB(){
         db = DatabaseManager(context).writableDatabase
@@ -25,7 +26,7 @@ class ProjectDAO(val context : Context) {
     private fun getContentValue(project: Project): ContentValues{
         val values = ContentValues()
         values.put(Project.COLUMN_TITLE,project.title)
-        values.put(Project.COLUMN_CATEGORY,project.category)
+        values.put(Project.COLUMN_CATEGORY,project.category.id)
         values.put(Project.COLUMN_DESCRIPTION,project.description)
         values.put(Project.COLUMN_IMAGE_URL,project.imageUrl)
         return values
@@ -57,19 +58,46 @@ class ProjectDAO(val context : Context) {
     private fun cursorToEntity(cursor : Cursor): Project{
         val id = cursor.getInt(cursor.getColumnIndexOrThrow(Project.COLUMN_ID))
         val title = cursor.getString(cursor.getColumnIndexOrThrow(Project.COLUMN_TITLE))
-        val category = cursor.getString(cursor.getColumnIndexOrThrow(Project.COLUMN_CATEGORY))
+        val categoryId = cursor.getInt(cursor.getColumnIndexOrThrow(Project.COLUMN_CATEGORY))
         val description = cursor.getString(cursor.getColumnIndexOrThrow(Project.COLUMN_DESCRIPTION))
         val imageUrl = cursor.getString(cursor.getColumnIndexOrThrow(Project.COLUMN_IMAGE_URL))
-        return Project(id,title,category,description,imageUrl)
+
+        val startDateIdx = cursor.getColumnIndex(Project.COLUMN_START_DATE)
+        val startDate = if (startDateIdx != -1 && !cursor.isNull(startDateIdx)) {
+            cursor.getString(startDateIdx)
+        } else ""
+
+        val endDateIdx = cursor.getColumnIndex(Project.COLUMN_END_DATE)
+        val endDate = if (endDateIdx != -1 && !cursor.isNull(endDateIdx)) {
+            cursor.getString(endDateIdx)
+        } else ""
+
+        val materialsIdx = cursor.getColumnIndex(Project.COLUMN_TOOLS)
+        val tools = if (materialsIdx != -1 && !cursor.isNull(materialsIdx)) {
+            cursor.getString(materialsIdx)
+        } else ""
+
+        //val startDate = cursor.getString(cursor.getColumnIndexOrThrow(Project.COLUMN_START_DATE))
+        //val endDate = cursor.getString(cursor.getColumnIndexOrThrow(Project.COLUMN_END_DATE))
+        //val tools = cursor.getString(cursor.getColumnIndexOrThrow(Project.COLUMN_TOOLS))
+        val category = categoryDAO.find(categoryId)!!
+        return Project(id,title,category,description,imageUrl,startDate,endDate,tools)
     }
-    fun findAll() : List<Project>{
+    fun findAll(): List<Project> {
+        return findAllBy(null)
+    }
+
+    fun findAllByCategory(category: Category): List<Project> {
+        return findAllBy("${Project.COLUMN_CATEGORY} = ${category.id}")
+    }
+    fun findAllBy(where:String?) : List<Project>{
         openDB()
         val projectList = mutableListOf<Project>()
         try {
             val cursor = db.query(
                 Project.TABLE_NAME,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
-                null,              // The columns for the WHERE clause
+                where,              // The columns for the WHERE clause
                 null,          // The values for the WHERE clause
                 null,                   // don't group the rows
                 null,                   // don't filter by row groups

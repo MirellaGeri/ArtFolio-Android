@@ -20,7 +20,7 @@
         <!--HEAD-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="240dp">
+                android:layout_height="300dp">
                 <ImageView
                     android:id="@+id/projectImageView"
                     android:layout_width="match_parent"
@@ -64,6 +64,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
                     android:text="@string/description_label_detail"/>
                 <TextView
                     android:id="@+id/descriptionTextView"
@@ -76,6 +78,64 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="16dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp">
+                <TextView
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_start_date" />
+                <TextView
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    tools:text="12/05/2026"/>
+
+                <TextView
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_end_date" />
+                <TextView
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    tools:text="12/05/2026"/>
+            </LinearLayout>
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="16dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_tools"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="8dp"/>
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.Material3.Chip.Suggestion"
+                    android:id="@+id/toolsChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="PHP"
+                    android:clickable="false"
+                    app:ensureMinTouchTargetSize="false"
+                    android:layout_gravity="start"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
     <LinearLayout

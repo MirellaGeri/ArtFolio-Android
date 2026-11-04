@@ -36,7 +36,7 @@ class ProjectAdapter(
 class ProjectViewHolder(val binding: ItemProjectBinding) : RecyclerView.ViewHolder(binding.root){
     fun render(project: Project){
         binding.projectTitleTextView.text = project.title
-        binding.categoryTextView.text = project.category
+        binding.categoryTextView.text = project.category.name
         val uri = project.imageUrl
         Log.i("ADAPTER","ruta de image es: ${project.imageUrl}")
         if (uri.startsWith("http")){

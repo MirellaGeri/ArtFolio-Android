@@ -21,17 +21,27 @@ import com.mirellageri.artfolio.data.ProjectDAO
 import com.mirellageri.artfolio.databinding.ActivityAddProjectBinding
 import com.mirellageri.artfolio.databinding.DialogCategoryBinding
 import com.bumptech.glide.Glide
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.mirellageri.artfolio.data.Category
+import com.mirellageri.artfolio.data.CategoryDAO
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class AddProjectActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddProjectBinding
+    lateinit var project: Project
     lateinit var projectDAO: ProjectDAO
-    lateinit var listCategory : ArrayList<String>
+    lateinit var category: Category
+    lateinit var categoryDAO: CategoryDAO
+    lateinit var listCategory : MutableList<Category>
+    private lateinit var listCategoryNames: MutableList<String>
     lateinit var adapterCategory: ArrayAdapter<String>
-
     private var uriImage:String = ""
     private val openGalleryLauncher = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){
         uri: Uri? ->
@@ -42,7 +52,7 @@ class AddProjectActivity : AppCompatActivity() {
                 binding.imageUrlTextField.setText("")
                 binding.previewImageView.setImageURI(uri)
             }else{
-                Toast.makeText(this, "Error al procesar la imagen de la galería", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.error_process_gallery_image), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -56,10 +66,13 @@ class AddProjectActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        //inicializar DAO
+        //inicializar DAOs
+        categoryDAO = CategoryDAO(this)
         projectDAO = ProjectDAO(this)
-        listCategory = arrayListOf(getString(R.string.category_crochet),getString(R.string.category_origami),getString(R.string.category_art2d))
-        adapterCategory = ArrayAdapter(this,android.R.layout.simple_dropdown_item_1line,listCategory)
+
+        listCategory = categoryDAO.findAll().toMutableList()
+        listCategoryNames = listCategory.map { it.name }.toMutableList()
+        adapterCategory = ArrayAdapter(this,android.R.layout.simple_dropdown_item_1line,listCategoryNames)
         binding.categoryACTextView.setAdapter(adapterCategory)
         binding.addCategoryButton.setOnClickListener {
             showCategoryDialog()
@@ -69,31 +82,64 @@ class AddProjectActivity : AppCompatActivity() {
         }
         showImageLink()
         binding.saveButton.setOnClickListener {
-            val project = Project(-1,"","","","")
+            category = Category(-1,"")
+            val project = Project(-1,"",category,"","","","","")
             saveProject(project)
+        }
+        binding.startDateEditText.setOnClickListener {
+            showDataPicker(binding.startDateEditText,getString(R.string.title_start_date),"START_PICKER")
+        }
+        binding.startDateTextField.setEndIconOnClickListener {
+            showDataPicker(binding.startDateEditText,getString(R.string.title_start_date),"START_PICKER")
+        }
+        binding.endDateEditText.setOnClickListener {
+            showDataPicker(binding.endDateEditText,getString(R.string.title_end_date),"END_PICKER")
+        }
+        binding.endDateTextField.setEndIconOnClickListener {
+            showDataPicker(binding.endDateEditText,getString(R.string.title_end_date),"END_PICKER")
         }
     }
     private fun saveProject(project: Project){
         val title = binding.titleTextField.text.toString().trim()
         val description = binding.descriptionTextField.text.toString().trim()
-        val category = binding.categoryACTextView.text.toString().trim()
-        if (title.isEmpty() || description.isEmpty() || uriImage.isEmpty()){
-            Toast.makeText(this, "Por favor, completa todos los campos obligatorios", Toast.LENGTH_SHORT).show()
+        val categoryName = binding.categoryACTextView.text.toString().trim()
+        val startDate = binding.startDateEditText.text.toString().trim()
+        val endDate = binding.endDateEditText.text.toString().trim()
+        val tools = binding.toolsEditText.text.toString().trim()
+
+        if (title.isEmpty() || description.isEmpty() || uriImage.isEmpty() || startDate.isEmpty() || tools.isEmpty()){ //|| endDate.isEmpty()
+            Toast.makeText(this, getString(R.string.toast_validation_text_view), Toast.LENGTH_SHORT).show()
             return
         }
+
+        if (startDate.isNotEmpty() && endDate.isNotEmpty()) {
+            try {
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val start = dateFormat.parse(binding.startDateEditText.text.toString())
+                val end = dateFormat.parse(binding.endDateEditText.text.toString())
+                if (start != null && end != null && end.before(start)) {
+                    Toast.makeText(this, "La fecha de fin no puede ser anterior a la de inicio", Toast.LENGTH_SHORT).show()
+                    return
+                }
+            } catch (e: Exception) {
+                e.printStackTrace() // Evita caídas si el formato de texto falla por alguna razón
+            }
+        }
+        val categoryDB = categoryDAO.findIdxName(categoryName)
+        if (categoryDB  == null) {
+            Toast.makeText(this, getString(R.string.toast_validation_category), Toast.LENGTH_SHORT).show()
+            return
+        }
+        category = categoryDB
         project.title = title
         project.description = description
         project.category = category
         project.imageUrl = uriImage
-        try {
-            projectDAO.openDB()
-            projectDAO.save(project)
-            finish()
-        }catch (e : Exception){
-            Log.i("FORM", e.localizedMessage)
-        }finally {
-            projectDAO.closeDB()
-        }
+        project.startDate = startDate
+        project.endDate = endDate
+        project.tools = tools
+        projectDAO.save(project)
+        finish()
     }
     private fun showCategoryDialog(){
         val dialogBinding = DialogCategoryBinding.inflate(layoutInflater)
@@ -105,14 +151,29 @@ class AddProjectActivity : AppCompatActivity() {
             .setNegativeButton(getString(R.string.bottom_cancel_label)){_,_ -> }
         val dialog = builder.create()
         dialog.show()
+
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             val newCategory = dialogBinding.categoryTextField.editText!!.text.toString()
             if (newCategory.isEmpty()){
                 dialogBinding.categoryTextField.error = getString(R.string.warning_category_input)
             }else{
-                if (!listCategory.contains(newCategory)){
-                    listCategory.add(newCategory)
-                    adapterCategory.notifyDataSetChanged()
+                if (!listCategoryNames.contains(newCategory)) {
+
+                    // 1. Crear el objeto intermedio y guardarlo en la base de datos física
+                    val newCategoryObject = Category(-1,newCategory)
+                    categoryDAO.insert(newCategoryObject)
+
+                    // 2. Buscarlo de nuevo para recuperar el ID que SQLite le asignó automáticamente
+                    val savedCategory = categoryDAO.findIdxName(newCategory)
+
+                    if (savedCategory != null) {
+                        // Actualizamos nuestra lista de objetos global
+                        listCategory.add(savedCategory)
+
+                        // Actualizamos la lista de nombres visuales y notificamos al adaptador
+                        listCategoryNames.add(newCategory)
+                        adapterCategory.notifyDataSetChanged()
+                    }
                 }
                 binding.categoryACTextView.setText(newCategory,false)
                 Toast.makeText(this, getString(R.string.toast_new_category_message), Toast.LENGTH_SHORT).show()
@@ -159,8 +220,42 @@ class AddProjectActivity : AppCompatActivity() {
             }
             destineFile.absolutePath
         }catch (e : Exception){
-            Log.e("FORM","Error to copy File to PhotoPicker")
+            Log.e("FORM",getString(R.string.error_copy_image_storage))
             null
         }
+    }
+    private fun showDataPicker(
+        editTextTarget: com.google.android.material.textfield.TextInputEditText,
+        title: String,
+        tag: String
+    ) {
+        val datePickerBuilder = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(title)
+        //  Lee la fecha del EditText actual para abrir el calendario en ese día
+        if (editTextTarget.text.toString().isNotEmpty()) {
+            try {
+                val dateFormat = SimpleDateFormat(getString(R.string.date_format), Locale.getDefault())
+                dateFormat.timeZone = TimeZone.getTimeZone(getString(R.string.time_zone))
+                val parsedDate = dateFormat.parse(editTextTarget.text.toString())
+                parsedDate?.let {
+                    datePickerBuilder.setSelection(it.time)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        val datePicker = datePickerBuilder.build()
+        // Al pulsar Aceptar, escribe el resultado en el EditText correspondiente
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            val dateFormat = SimpleDateFormat(getString(R.string.date_format), Locale.getDefault())
+            dateFormat.timeZone = TimeZone.getTimeZone(getString(R.string.time_zone))
+            val formattedDate = dateFormat.format(Date(selection))
+            editTextTarget.setText(formattedDate)
+        }
+        // Quita el foco si se cancela o se cierra
+        datePicker.addOnNegativeButtonClickListener { editTextTarget.clearFocus() }
+        datePicker.addOnDismissListener { editTextTarget.clearFocus() }
+        // Muestra el calendario usando el FragmentManager de la Activity
+        datePicker.show(supportFragmentManager, tag)
     }
 }
