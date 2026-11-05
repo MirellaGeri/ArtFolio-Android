@@ -20,7 +20,7 @@
         <!--HEAD-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp">
+                android:layout_height="450dp">
                 <ImageView
                     android:id="@+id/projectImageView"
                     android:layout_width="match_parent"
@@ -41,20 +41,36 @@
                     tools:text="Project title"
                     android:textSize="24sp"
                     android:textStyle="bold" />
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.Material3.Chip.Suggestion"
-                    android:id="@+id/categoryChip"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="Category"
-                    android:clickable="false"
-                    app:ensureMinTouchTargetSize="false"
-                    android:layout_gravity="end"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="8dp">
+                    <Button
+                        android:id="@+id/editButton"
+                        style="?attr/materialIconButtonStyle"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:icon="@drawable/ic_edit"/>
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.Material3.Chip.Suggestion"
+                        android:id="@+id/categoryChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Category"
+                        android:clickable="false"
+                        app:ensureMinTouchTargetSize="false"/>
+                </LinearLayout>
             </LinearLayout>
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_margin="16dp"/>
+                android:layout_margin="8dp"/>
             <!--Description -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,7 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    tools:text="Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance"/>
+                    tools:text=" and 1.10.33 of de Finibus Bonorum et Malorum by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance"/>
             </LinearLayout>
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
@@ -88,8 +104,10 @@
                     android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
                     android:text="@string/title_start_date" />
                 <TextView
+                    android:id="@+id/startDateTextView"
                     android:textSize="20sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -101,8 +119,10 @@
                     android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
                     android:text="@string/title_end_date" />
                 <TextView
+                    android:id="@+id/endDateTextView"
                     android:textSize="20sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -147,7 +167,8 @@
         android:paddingVertical="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone">
         <Button
             android:id="@+id/contactButton"
             android:layout_width="0dp"

@@ -1,5 +1,6 @@
 package com.mirellageri.artfolio.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +16,7 @@ import java.io.File
 class DetailActivity : AppCompatActivity() {
     lateinit var binding: ActivityDetailBinding
     lateinit var projectDAO: ProjectDAO
+    var id = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,31 +29,41 @@ class DetailActivity : AppCompatActivity() {
             insets
         }
         projectDAO = ProjectDAO(this)
-        val id = intent.getIntExtra("PROJECT_ID",-1)
+        id = intent.getIntExtra("PROJECT_ID",id)
+
+        binding.editButton.setOnClickListener {
+            val intent = Intent(this, AddProjectActivity::class.java)
+            intent.putExtra("PROJECT_ID", id)
+            startActivity(intent)
+        }
+        loadData(id)
+    }
+
+    override fun onResume() {
+        super.onResume()
         loadData(id)
     }
     private fun loadData(id:Int){
-        try {
-            projectDAO.openDB()
-            val project = projectDAO.findById(id)!!
-            binding.titleTextView.text = project.title
-            binding.categoryChip.text = project.category.name
-            binding.descriptionTextView.text = project.description
-            if (project.imageUrl.startsWith("http")) {
-                Glide.with(this)
-                    .load(project.imageUrl)
-                    .into(binding.projectImageView)
-            } else {
-                Glide.with(this)
-                    .load(File(project.imageUrl)) // Tu archivo copiado de la galería
-                    .into(binding.projectImageView)
-            }
-            binding.projectImageView
-
-        }catch (e : Exception){
-            Log.i("DETAIL", e.localizedMessage)
-        }finally {
-            projectDAO.closeDB()
+        val project = projectDAO.findById(id)!!
+        supportActionBar?.title = project.title
+        binding.titleTextView.text = project.title
+        binding.categoryChip.text = project.category.name
+        binding.descriptionTextView.text = project.description
+        binding.startDateTextView.text = project.startDate
+        if (project.endDate.isEmpty() ){
+            binding.endDateTextView.text = getString(R.string.detail_without_data)
+        }else{
+            binding.endDateTextView.text = project.endDate
+        }
+        binding.toolsChip.text = project.tools
+        if (project.imageUrl.startsWith("http")) {
+            Glide.with(this)
+                .load(project.imageUrl)
+                .into(binding.projectImageView)
+        } else {
+            Glide.with(this)
+                .load(File(project.imageUrl)) // Tu archivo copiado de la galería
+                .into(binding.projectImageView)
         }
     }
 }

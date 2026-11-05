@@ -23,7 +23,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var adapter: ProjectAdapter
     lateinit var projectDAO: ProjectDAO
     lateinit var categoryDAO: CategoryDAO
-    var projectList = listOf<Project>()
+    var projectList: List<Project> = emptyList()
+    var filteredProjectList: List<Project> = emptyList()
+    //podemos filtrar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -66,6 +68,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when(item.itemId){
                 R.id.menu_home -> {
+                    supportActionBar?.title = getString(R.string.main_title)
                     binding.addProjectButton.show()
                     reloadData()
                     true
@@ -82,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                         val nameSelected = menuItem.title.toString()
                         binding.addProjectButton.hide()
                         val listProjectxCategory = projectDAO.findAllByCategory(Category(idSelected,nameSelected))
-
+                        supportActionBar?.title = nameSelected
                         // Actualizas tu adaptador clásico de proyectos con la lista filtrada
                         adapter.updateData(listProjectxCategory)
                         true

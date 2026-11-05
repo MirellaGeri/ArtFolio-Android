@@ -22,12 +22,12 @@
             <!-- TITLE -->
             <com.google.android.material.textfield.TextInputLayout
                 style="?attr/textInputOutlinedStyle"
+                android:id="@+id/titleTextField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:hint="@string/new_project_title">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/titleTextField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -36,13 +36,13 @@
             <!-- DESCRIPTION -->
             <com.google.android.material.textfield.TextInputLayout
                 style="?attr/textInputOutlinedStyle"
+                android:id="@+id/descriptionTextField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:hint="@string/new_project_description">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/descriptionTextField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
@@ -56,6 +56,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginBottom="16dp">
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/categoryTextField"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -122,7 +123,7 @@
                 android:hint="@string/title_start_date"
                 app:endIconMode="custom"
                 android:layout_marginBottom="8dp"
-                app:endIconDrawable="@drawable/ic_new_project_dark"
+                app:endIconDrawable="@drawable/ic_today"
                 style="?attr/textInputOutlinedStyle">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/startDateEditText"
@@ -140,7 +141,7 @@
                 android:hint="@string/title_end_date"
                 app:endIconMode="custom"
                 android:layout_marginBottom="8dp"
-                app:endIconDrawable="@drawable/ic_new_project_dark"
+                app:endIconDrawable="@drawable/ic_today"
                 style="?attr/textInputOutlinedStyle">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/endDateEditText"
@@ -152,12 +153,12 @@
             </com.google.android.material.textfield.TextInputLayout>
             <!-- TOOLS -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/materialsInputLayout"
+                android:id="@+id/toolsInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:hint="@string/hint_tools"
-                app:helperText="Ej: Photoshop, Procreate, Acuarelas, Tableta Wacom"
+                app:helperText="@string/helper_text"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/toolsEditText"

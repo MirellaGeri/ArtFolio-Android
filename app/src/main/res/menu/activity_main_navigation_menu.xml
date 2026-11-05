@@ -15,5 +15,6 @@
         android:id="@+id/menu_user"
         android:title="@string/nav_menu_user"
         android:icon="@drawable/ic_user"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:visible="false"/>
 </menu>

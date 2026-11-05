@@ -29,6 +29,9 @@ class ProjectDAO(val context : Context) {
         values.put(Project.COLUMN_CATEGORY,project.category.id)
         values.put(Project.COLUMN_DESCRIPTION,project.description)
         values.put(Project.COLUMN_IMAGE_URL,project.imageUrl)
+        values.put(Project.COLUMN_START_DATE,project.startDate)
+        values.put(Project.COLUMN_END_DATE,project.endDate)
+        values.put(Project.COLUMN_TOOLS,project.tools)
         return values
     }
     fun insert(project : Project){
@@ -72,9 +75,9 @@ class ProjectDAO(val context : Context) {
             cursor.getString(endDateIdx)
         } else ""
 
-        val materialsIdx = cursor.getColumnIndex(Project.COLUMN_TOOLS)
-        val tools = if (materialsIdx != -1 && !cursor.isNull(materialsIdx)) {
-            cursor.getString(materialsIdx)
+        val toolsIdx = cursor.getColumnIndex(Project.COLUMN_TOOLS)
+        val tools = if (toolsIdx != -1 && !cursor.isNull(toolsIdx)) {
+            cursor.getString(toolsIdx)
         } else ""
 
         //val startDate = cursor.getString(cursor.getColumnIndexOrThrow(Project.COLUMN_START_DATE))

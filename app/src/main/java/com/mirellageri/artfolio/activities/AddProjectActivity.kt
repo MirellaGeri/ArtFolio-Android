@@ -69,6 +69,35 @@ class AddProjectActivity : AppCompatActivity() {
         //inicializar DAOs
         categoryDAO = CategoryDAO(this)
         projectDAO = ProjectDAO(this)
+        val id = intent.getIntExtra("PROJECT_ID", -1)
+        //category = categoryDAO.find(categoryId)!!
+        if (id != -1) {
+           // Edit
+            project = projectDAO.findById(id)!!
+            supportActionBar?.title = getString(R.string.edit_project)
+            binding.titleTextField.editText?.setText(project.title)
+            binding.descriptionTextField.editText?.setText(project.description)
+            binding.categoryTextField.editText?.setText(project.category.name)
+            binding.startDateTextField.editText?.setText(project.startDate)
+            binding.endDateTextField.editText?.setText(project.endDate)
+            binding.toolsInputLayout.editText?.setText(project.tools)
+            if (project.imageUrl.startsWith("http")) {
+                Glide.with(this)
+                    .load(project.imageUrl)
+                    .into(binding.previewImageView)
+                binding.imageUrlTextField.setText(project.imageUrl)
+            } else {
+                Glide.with(this)
+                    .load(File(project.imageUrl)) // Tu archivo copiado de la galería
+                    .into(binding.previewImageView)
+            }
+            uriImage = project.imageUrl
+        } else {
+           // Crear
+            category = Category(-1,"")
+            project = Project(-1,"",category,"","","","","")
+           supportActionBar?.title = getString(R.string.new_project)
+        }
 
         listCategory = categoryDAO.findAll().toMutableList()
         listCategoryNames = listCategory.map { it.name }.toMutableList()
@@ -81,11 +110,6 @@ class AddProjectActivity : AppCompatActivity() {
             openGalleryLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         showImageLink()
-        binding.saveButton.setOnClickListener {
-            category = Category(-1,"")
-            val project = Project(-1,"",category,"","","","","")
-            saveProject(project)
-        }
         binding.startDateEditText.setOnClickListener {
             showDataPicker(binding.startDateEditText,getString(R.string.title_start_date),"START_PICKER")
         }
@@ -98,31 +122,35 @@ class AddProjectActivity : AppCompatActivity() {
         binding.endDateTextField.setEndIconOnClickListener {
             showDataPicker(binding.endDateEditText,getString(R.string.title_end_date),"END_PICKER")
         }
+        //Button save all
+        binding.saveButton.setOnClickListener {
+            saveProject(project)
+        }
     }
     private fun saveProject(project: Project){
-        val title = binding.titleTextField.text.toString().trim()
-        val description = binding.descriptionTextField.text.toString().trim()
+        val title = binding.titleTextField.editText?.text.toString().trim()
+        val description = binding.descriptionTextField.editText?.text.toString().trim()
         val categoryName = binding.categoryACTextView.text.toString().trim()
         val startDate = binding.startDateEditText.text.toString().trim()
         val endDate = binding.endDateEditText.text.toString().trim()
         val tools = binding.toolsEditText.text.toString().trim()
 
-        if (title.isEmpty() || description.isEmpty() || uriImage.isEmpty() || startDate.isEmpty() || tools.isEmpty()){ //|| endDate.isEmpty()
+        if (title.isEmpty() || description.isEmpty() || uriImage.isEmpty() || startDate.isEmpty() || tools.isEmpty()){
             Toast.makeText(this, getString(R.string.toast_validation_text_view), Toast.LENGTH_SHORT).show()
             return
         }
 
         if (startDate.isNotEmpty() && endDate.isNotEmpty()) {
             try {
-                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val dateFormat = SimpleDateFormat(getString(R.string.date_format), Locale.getDefault())
                 val start = dateFormat.parse(binding.startDateEditText.text.toString())
                 val end = dateFormat.parse(binding.endDateEditText.text.toString())
                 if (start != null && end != null && end.before(start)) {
-                    Toast.makeText(this, "La fecha de fin no puede ser anterior a la de inicio", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.toast_validation_date), Toast.LENGTH_SHORT).show()
                     return
                 }
             } catch (e: Exception) {
-                e.printStackTrace() // Evita caídas si el formato de texto falla por alguna razón
+                e.printStackTrace()
             }
         }
         val categoryDB = categoryDAO.findIdxName(categoryName)

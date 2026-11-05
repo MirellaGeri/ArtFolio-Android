@@ -24,8 +24,12 @@
     <string name="title_start_date">Start Date</string>
     <string name="title_end_date">End Date</string>
     <string name="hint_tools">Tools</string>
+    <string name="edit_project">Edit Project</string>
+    <string name="new_project">New Project</string>
+    <string name="detail_without_data">-----------</string>
     <string name="helper_text">Example: Photoshop, Procreate, watercolors, Wacom tablet</string>
 
+    <string name="toast_validation_date">The end date cannot be earlier than the start date.</string>
     <string name="toast_new_category_message">Category added</string>
     <string name="toast_validation_text_view">Please complete all required fields.</string>
     <string name="toast_validation_category">The selected category is not valid.</string>
