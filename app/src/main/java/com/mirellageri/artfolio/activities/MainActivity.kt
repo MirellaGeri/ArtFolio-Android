@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var categoryDAO: CategoryDAO
     var projectList: List<Project> = emptyList()
     var filteredProjectList: List<Project> = emptyList()
+    var isFilter = false
     //podemos filtrar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         adapter = ProjectAdapter(projectList, ::onItemClick)
         binding.recyclerViewMain.adapter = adapter
         binding.recyclerViewMain.layoutManager = GridLayoutManager(this, 2)
-
+        supportActionBar?.title = getString(R.string.main_title)
         binding.addProjectButton.setOnClickListener {
             val intent = Intent(this, AddProjectActivity::class.java)
             startActivity(intent)
@@ -56,12 +57,16 @@ class MainActivity : AppCompatActivity() {
     }
     private fun reloadData(){
         projectList = projectDAO.findAll()
-        adapter.updateData(projectList)
+        if (!isFilter) {
+            adapter.updateData(projectList)
+        }else{
+            adapter.updateData(filteredProjectList)
+        }
     }
     private fun onItemClick(position: Int){
-        val project = projectList[position]
+        //val project = projectList[position]
         val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra("PROJECT_ID", project.id)
+        intent.putExtra("PROJECT_ID",position)
         startActivity(intent)
     }
     private fun getNavigationView(){
@@ -69,6 +74,7 @@ class MainActivity : AppCompatActivity() {
             when(item.itemId){
                 R.id.menu_home -> {
                     supportActionBar?.title = getString(R.string.main_title)
+                    isFilter = false
                     binding.addProjectButton.show()
                     reloadData()
                     true
@@ -84,10 +90,11 @@ class MainActivity : AppCompatActivity() {
                         val idSelected = menuItem.itemId
                         val nameSelected = menuItem.title.toString()
                         binding.addProjectButton.hide()
-                        val listProjectxCategory = projectDAO.findAllByCategory(Category(idSelected,nameSelected))
+                        filteredProjectList = projectDAO.findAllByCategory(Category(idSelected,nameSelected))
                         supportActionBar?.title = nameSelected
+                        isFilter = true
                         // Actualizas tu adaptador clásico de proyectos con la lista filtrada
-                        adapter.updateData(listProjectxCategory)
+                        adapter.updateData(filteredProjectList)
                         true
                     }
                     popup.show() // Mostramos el menú hacia arriba

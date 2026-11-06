@@ -23,7 +23,7 @@ class ProjectAdapter(
         val project = items[position]
         holder.render(project)
         holder.itemView.setOnClickListener {
-            onItemCLick(position)
+            onItemCLick(project.id)
         }
     }
     override fun getItemCount(): Int = items.size
