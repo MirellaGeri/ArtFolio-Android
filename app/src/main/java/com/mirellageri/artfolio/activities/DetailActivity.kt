@@ -3,6 +3,7 @@ package com.mirellageri.artfolio.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -36,12 +37,23 @@ class DetailActivity : AppCompatActivity() {
             intent.putExtra("PROJECT_ID", id)
             startActivity(intent)
         }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         loadData(id)
     }
 
     override fun onResume() {
         super.onResume()
         loadData(id)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
     private fun loadData(id:Int){
         val project = projectDAO.findById(id)!!

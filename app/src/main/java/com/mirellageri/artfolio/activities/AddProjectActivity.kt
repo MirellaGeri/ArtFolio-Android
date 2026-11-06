@@ -280,10 +280,8 @@ class AddProjectActivity : AppCompatActivity() {
             val formattedDate = dateFormat.format(Date(selection))
             editTextTarget.setText(formattedDate)
         }
-        // Quita el foco si se cancela o se cierra
         datePicker.addOnNegativeButtonClickListener { editTextTarget.clearFocus() }
         datePicker.addOnDismissListener { editTextTarget.clearFocus() }
-        // Muestra el calendario usando el FragmentManager de la Activity
         datePicker.show(supportFragmentManager, tag)
     }
 }
