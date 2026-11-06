@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="16dp">
+            android:layout_margin="16dp"
+            android:paddingBottom="16dp">
             <!-- TITLE -->
             <com.google.android.material.textfield.TextInputLayout
                 style="?attr/textInputOutlinedStyle"

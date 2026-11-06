@@ -3,6 +3,7 @@ package com.mirellageri.artfolio.activities
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -63,7 +64,7 @@ class AddProjectActivity : AppCompatActivity() {
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
         //inicializar DAOs
@@ -122,9 +123,19 @@ class AddProjectActivity : AppCompatActivity() {
         binding.endDateTextField.setEndIconOnClickListener {
             showDataPicker(binding.endDateEditText,getString(R.string.title_end_date),"END_PICKER")
         }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //Button save all
         binding.saveButton.setOnClickListener {
             saveProject(project)
+        }
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
     private fun saveProject(project: Project){

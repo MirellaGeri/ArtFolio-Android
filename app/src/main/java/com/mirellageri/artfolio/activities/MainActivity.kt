@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                     popup.show() // Mostramos el menú hacia arriba
-                    false
+                    true
                 }R.id.menu_user-> {
                 true
             }
