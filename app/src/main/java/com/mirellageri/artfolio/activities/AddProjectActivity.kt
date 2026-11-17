@@ -196,27 +196,29 @@ class AddProjectActivity : AppCompatActivity() {
             if (newCategory.isEmpty()){
                 dialogBinding.categoryTextField.error = getString(R.string.warning_category_input)
             }else{
-                if (!listCategoryNames.contains(newCategory)) {
-
+                val cleanCategory = newCategory.trim()
+                if (!listCategoryNames.contains(cleanCategory)) {
                     // 1. Crear el objeto intermedio y guardarlo en la base de datos física
-                    val newCategoryObject = Category(-1,newCategory)
+                    val newCategoryObject = Category(-1,cleanCategory)
                     categoryDAO.insert(newCategoryObject)
 
                     // 2. Buscarlo de nuevo para recuperar el ID que SQLite le asignó automáticamente
-                    val savedCategory = categoryDAO.findIdxName(newCategory)
+                    val savedCategory = categoryDAO.findIdxName(cleanCategory)
 
                     if (savedCategory != null) {
                         // Actualizamos nuestra lista de objetos global
                         listCategory.add(savedCategory)
 
                         // Actualizamos la lista de nombres visuales y notificamos al adaptador
-                        listCategoryNames.add(newCategory)
+                        listCategoryNames.add(cleanCategory)
                         adapterCategory.notifyDataSetChanged()
+                        binding.categoryACTextView.setText(cleanCategory,false)
+                        Toast.makeText(this, getString(R.string.toast_new_category_message), Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
                     }
+                }else{
+                    dialogBinding.categoryTextField.error = getString(R.string.error_category_exist)
                 }
-                binding.categoryACTextView.setText(newCategory,false)
-                Toast.makeText(this, getString(R.string.toast_new_category_message), Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
             }
         }
     }

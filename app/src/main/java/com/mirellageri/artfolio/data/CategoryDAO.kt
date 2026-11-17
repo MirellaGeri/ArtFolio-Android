@@ -26,15 +26,16 @@ class CategoryDAO (val context: Context){
         return Category(id, name)
     }
     fun insert(category: Category) {
-        // Create a new map of values, where column names are the keys
         val values = getContentValues(category)
         try {
             open()
-            // Insert the new row, returning the primary key value of the new row
-            val newRowId = db.insert(Category.TABLE_NAME, null, values)
+            val newRowId = db.insertOrThrow(Category.TABLE_NAME, null, values)
             Log.i("DATABASE", "New row inserted in table ${Category.TABLE_NAME} with id: $newRowId")
-        } catch (e: Exception) {
+        } catch (e: android.database.SQLException) {
+            println("Error Real : ${e.message}")
             e.printStackTrace()
+        }catch (e: Exception) {
+            println("Otro error inesperado: ${e.message}")
         } finally {
             close()
         }

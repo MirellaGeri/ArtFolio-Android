@@ -37,5 +37,5 @@
     <string name="error_copy_image_storage">Error to copy File to PhotoPicker</string>
     <string name="error_view_image_preview">Invalid format (.jpg, .png or .jpeg)</string>
     <string name="error_process_gallery_image">Error processing the gallery image</string>
-    <string name="error"></string>
+    <string name="error_category_exist">This Category exists</string>
 </resources>
